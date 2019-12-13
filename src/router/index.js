@@ -56,17 +56,107 @@ export const constantRoutes = [
   },
 
   {
+    path: '/alarm',
+    component: Layout,
+    redirect: '/alarm/notification',
+    name: 'alarm',
+    meta: { title: '警报', icon: 'example' },
+    children: [
+      {
+        path: 'notification',
+        name: 'notification',
+        component: () => import('@/views/alarmconfig/index'),
+        meta: { title: '提醒', icon: 'table' }
+      },
+      {
+        path: 'configuration',
+        name: 'configuration',
+        component: () => import('@/views/alarmnotice/index'),
+        meta: { title: '配置', icon: 'tree' }
+      },
+      {
+        path: 'modbus',
+        name: 'Modbus',
+        component: () => import('@/views/modbus/index'),
+        meta: { title: 'ModBus', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/devices',
+    component: Layout,
+    redirect: '/devices/gateway',
+    name: 'Example',
+    meta: { title: '设备', icon: 'example' },
+    children: [
+      {
+        path: 'gateway',
+        name: 'Gateway',
+        component: () => import('@/views/gateway/index'),
+        meta: { title: '网关', icon: 'table' }
+      },
+      {
+        path: 'complex',
+        name: 'Gateway',
+        component: () => import('@/views/gateway/complex'),
+        meta: { title: '网关complex', icon: 'table' }
+      },
+      {
+        path: 'controller',
+        name: 'Controller',
+        component: () => import('@/views/controller/index'),
+        meta: { title: '控制器', icon: 'tree' }
+      },
+      {
+        path: 'modbus',
+        name: 'Modbus',
+        component: () => import('@/views/modbus/index'),
+        meta: { title: 'ModBus', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/tools',
+    component: Layout,
+    redirect: '/tools/map',
+    name: 'Example',
+    meta: { title: '工具', icon: 'example' },
+    children: [
+      {
+        path: 'gateway',
+        name: 'Gateway',
+        component: () => import('@/views/map/index'),
+        meta: { title: '地图', icon: 'table' }
+      },
+      {
+        path: 'controller',
+        name: 'Controller',
+        component: () => import('@/views/statistic/index'),
+        meta: { title: '统计', icon: 'tree' }
+      },
+      {
+        path: 'modbus',
+        name: 'Modbus',
+        component: () => import('@/views/search/index'),
+        meta: { title: '查询', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: 'Tree', icon: 'example' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'table', icon: 'table' }
       },
       {
         path: 'tree',
