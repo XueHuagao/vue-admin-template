@@ -109,6 +109,12 @@ export const constantRoutes = [
         meta: { title: '控制器', icon: 'tree' }
       },
       {
+        path: 'example',
+        name: 'Controller',
+        component: () => import('@/views/controller/example'),
+        meta: { title: '控制器example', icon: 'tree' }
+      },
+      {
         path: 'modbus',
         name: 'Modbus',
         component: () => import('@/views/modbus/index'),

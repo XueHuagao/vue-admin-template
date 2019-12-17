@@ -1,47 +1,178 @@
 <template>
-  <div>
-    <blog-header></blog-header>
-    <hr />
-    <div>
-      用户名:
-      <input type="text" v-model="loginInfoVo.username" placeholder="请输入用户名" />
-      <br />密码：
-      <input type="password" v-model="loginInfoVo.password" placeholder="请输入密码" />
-      <br />
-      <button v-on:click="login">登录</button>
-      <br />登录验证情况：
-      <textarea cols="30" rows="10" v-model="responseResult"></textarea>
+  <div class="app-container">
+    <div class="filter-container" style="margin-top:20px;margin-bottom:20px;">
+      <el-input
+        v-model="listQuery.name"
+        placeholder="控制器名"
+        style="width:200px;"
+        class="filter-item"
+      />
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">查找</el-button>
+      <el-button class="filter-item" style="margin-left:10px;" type="primary" @click="handleCreate">
+        <i class="el-icon-plus">添加控制器</i>
+      </el-button>
     </div>
-    <hr />
-    <blog-footer></blog-footer>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+    >
+      <el-table-column align="center" label="控制器ID">
+        <template slot-scope="scope">{{ scope.$index }}</template>
+      </el-table-column>
+      <el-table-column label="名字">
+        <template slot-scope="scope">{{ scope.row.name }}</template>
+      </el-table-column>
+      <el-table-column label="站号">
+        <template slot-scope="scope">{{ scope.row.station_address }}</template>
+      </el-table-column>
+      <el-table-column label="System Code">
+        <template slot-scope="scope">{{ scope.row.system_code }}</template>
+      </el-table-column>
+      <el-table-column label="二次供水温度">
+        <template slot-scope="scope">{{ scope.row.二次供水温度 }}</template>
+      </el-table-column>
+      <el-table-column label="一次回水温度">
+        <template slot-scope="scope">{{ scope.row.一次回水温度 }}</template>
+      </el-table-column>
+      <el-table-column label="室外温度">
+        <template slot-scope="scope">{{ scope.row.室外温度 }}</template>
+      </el-table-column>
+      <el-table-column label="循环泵状态">
+        <template slot-scope="scope">{{ scope.row.循环泵状态 }}</template>
+      </el-table-column>
+      <el-table-column label="运行模式">
+        <template slot-scope="scope">{{ scope.row.运行模式 }}</template>
+      </el-table-column>
+      <el-table-column label="报警代码">
+        <template slot-scope="scope">{{ scope.row.报警代码 }}</template>
+      </el-table-column>
+      <el-table-column label="阀门设定开度">
+        <template slot-scope="scope">{{ scope.row.阀门设定开度 }}</template>
+      </el-table-column>
+      <el-table-column label="一次回水温度设定值">
+        <template slot-scope="scope">{{ scope.row.一次回水温度设定值 }}</template>
+      </el-table-column>
+      <el-table-column label="二次供水温度设定值">
+        <template slot-scope="scope">{{ scope.row.二次供水温度设定值 }}</template>
+      </el-table-column>
+      <el-table-column label="夜间室内温度设定值">
+        <template slot-scope="scope">{{ scope.row.夜间室内温度设定值 }}</template>
+      </el-table-column>
+      <el-table-column label="日间室内温度设定值">
+        <template slot-scope="scope">{{ scope.row.日间室内温度设定值 }}</template>
+      </el-table-column>
+      <el-table-column label="时间按表运行室内温度设定值">
+        <template slot-scope="scope">{{ scope.row.时间按表运行室内温度设定值 }}</template>
+      </el-table-column>
+      <el-table-column label="远程本地切换按钮">
+        <template slot-scope="scope">{{ scope.row.远程本地切换按钮 }}</template>
+      </el-table-column>
+      <el-table-column label="设置超时时间">
+        <template slot-scope="scope">{{ scope.row.设置超时时间 }}</template>
+      </el-table-column>
+      <el-table-column label="超时">
+        <template slot-scope="scope">{{ scope.row.超时 }}</template>
+      </el-table-column>
+      <el-table-column label="lastdate">
+        <template slot-scope="scope">{{ scope.row.lastdate }}</template>
+      </el-table-column>
+      <el-table-column label="registerDate">
+        <template slot-scope="scope">{{ scope.row.registerDate }}</template>
+      </el-table-column>
+      <el-table-column label="serialnum">
+        <template slot-scope="scope">{{ scope.row.serialnum }}</template>
+      </el-table-column>
+      <el-table-column label="firmwarever">
+        <template slot-scope="scope">{{ scope.row.firmwarever }}</template>
+      </el-table-column>
+    </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="fetchData"
+    />
+
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
+      <el-form :model="role" label-width="80px" label-position="left">
+        <el-form-item label="网关名称">
+          <el-input v-model="role.name" placeholder="网关名称" />
+        </el-form-item>
+        <el-form-item label="MAC地址">
+          <el-input v-model="role.mac" placeholder="MAC地址" />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
+        <el-button type="primary" @click="confirmRole">Confirm</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import blogHeader from "@/components/common/BlogHeader.vue";
-import blogFooter from "@/components/common/BlogFooter.vue";
+import Pagination from "@/components/Pagination";
+import { getList } from "@/api/table";
+
+const defaultRole = {
+  name: "",
+  mac: ""
+};
 
 export default {
-  name: "BlogLogin",
-  // blogHeader、blogFooter组件给申明到components里面然后在template里面使用
-  components: { blogHeader, blogFooter },
+  components: { Pagination },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: "success",
+        draft: "gray",
+        deleted: "danger"
+      };
+      return statusMap[status];
+    }
+  },
   data() {
     return {
-      loginInfoVo: { username: "", password: "" },
-      responseResult: []
+      role: Object.assign({}, defaultRole),
+      dialogVisible: false,
+      dialogType: "new",
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        name: ""
+      }
     };
   },
+  created() {
+    this.fetchData();
+  },
   methods: {
-    login() {
-      this.$axios
-        .get("/testtable", {})
-        .then(successResponse => {
-          this.responseResult = JSON.stringify(successResponse.data);
-          if (successResponse.data.code === 200) {
-            this.$router.replace({ path: "/index" });
-          }
-        })
-        .catch(failResponse => {});
+    fetchData() {
+      this.$axios.post("/controllerlist", this.listQuery).then(response => {
+        this.list = response.data.result;
+        this.total = 100;
+        this.listLoading = false;
+      });
+    },
+    handleSearch() {
+      this.fetchData();
+    },
+    handleCreate() {
+      this.dialogVisible = true;
+    },
+    confirmRole() {
+      this.$axios.post("/addGatewayapi", this.role);
+      this.dialogVisible = false;
+      this.fetchData();
     }
   }
 };
