@@ -125,30 +125,16 @@ export default {
   created() {
     this.fetchData();
   },
-  // methods: {
-  //   fetchData() {
-  //     this.$axios({
-  //       url:'/gatewaylist',
-  //       method:'post',
-  //       params:this.listQuery
-  //     })
-  //     .then(response => {
-  //       this.list = response.data.result;
-  //       this.listLoading = false;
-  //     });
-  //   }
-  // }
   methods: {
     fetchData() {
       this.$axios.post("/gatewaylist", this.listQuery).then(response => {
         this.list = response.data.result;
-        this.total = 100;
+        this.total = response.data.total;
         this.listLoading = false;
       });
     },
     handleSearch() {
       this.fetchData();
-      // alert("!");
     },
     handleCreate() {
       this.dialogVisible=true

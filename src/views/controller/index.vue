@@ -99,14 +99,60 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="800px"
+      :title="dialogType==='edit'?'Edit Role':'添加'"
+    >
       <el-form :model="role" label-width="80px" label-position="left">
         <el-form-item label="网关名称">
-          <el-input v-model="role.name" placeholder="网关名称" />
+          <el-select
+            v-model="role.gatewayid"
+            filterable
+            remote
+            :remote-method="remoteMethod"
+            placeholder="请选择"
+          >
+            <pagination
+              v-show="optionTotal>0"
+              :total="optionTotal"
+              :page.sync="optionListQuery.page"
+              :limit.sync="optionListQuery.limit"
+              @pagination="fetchOptions"
+            />
+            <el-option
+              v-for="item in optionList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="MAC地址">
-          <el-input v-model="role.mac" placeholder="MAC地址" />
+        <!-- <el-form-item label="test">
+          <el-input v-model="role.gatewayid" placeholder="test" />
+        </el-form-item> -->
+        <el-form-item label="控制器">
+          <el-input v-model="role.name" placeholder="控制器名称" />
         </el-form-item>
+        <el-form-item label="站号">
+          <el-input v-model="role.station_address" placeholder="站号" />
+        </el-form-item>
+        <!-- <el-select
+          v-model="value"
+          filterable
+          remote
+          :remote-method="remoteMethod"
+          placeholder="请选择"
+        >
+          <pagination
+            v-show="optionTotal>0"
+            :total="optionTotal"
+            :page.sync="optionListQuery.page"
+            :limit.sync="optionListQuery.limit"
+            @pagination="fetchOptions"
+          />
+          <el-option v-for="item in optionList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>-->
       </el-form>
       <div style="text-align:right;">
         <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
@@ -122,7 +168,8 @@ import { getList } from "@/api/table";
 
 const defaultRole = {
   name: "",
-  mac: ""
+  station_address: "",
+  gatewayid:""
 };
 
 export default {
@@ -149,18 +196,53 @@ export default {
         page: 1,
         limit: 10,
         name: ""
-      }
+      },
+
+      optionListQuery: {
+        page: 1,
+        limit: 10,
+        name: ""
+      },
+      value: [],
+      loading: false,
+
+      options: null,
+      optionList: null,
+      optionTotal: 0
     };
   },
+
   created() {
     this.fetchData();
+    this.fetchOptions();
+  },
+  mounted() {
+    // this.optionlist = this.states.map(item => {
+    //   return { value: `value:${item}`, label: `label:${item}` };
+    // });
   },
   methods: {
+    remoteMethod(query) {
+      let param;
+      query === "" ? (param = {}) : (param = { name: query });
+      this.$axios.post("/gatewaylist", this.optionListQuery).then(response => {
+        this.optionList = response.data.result;
+        this.optionTotal = response.data.total;
+        this.role.gatewayid=value;
+      });
+    },
+
     fetchData() {
       this.$axios.post("/controllerlist", this.listQuery).then(response => {
         this.list = response.data.result;
-        this.total = 100;
+        this.total = response.data.total;
         this.listLoading = false;
+      });
+    },
+    fetchOptions() {
+      this.$axios.post("/gatewaylist", this.optionListQuery).then(response => {
+        this.optionList = response.data.result;
+        this.optionTotal = response.data.total;
       });
     },
     handleSearch() {
@@ -170,7 +252,7 @@ export default {
       this.dialogVisible = true;
     },
     confirmRole() {
-      this.$axios.post("/addGatewayapi", this.role);
+      this.$axios.post("/addcontroller", this.role);
       this.dialogVisible = false;
       this.fetchData();
     }

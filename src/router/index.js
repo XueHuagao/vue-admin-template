@@ -94,7 +94,16 @@ export const constantRoutes = [
         path: 'gateway',
         name: 'Gateway',
         component: () => import('@/views/gateway/index'),
-        meta: { title: '网关', icon: 'table' }
+        meta: { title: '网关', icon: 'table' },
+        children: [
+          {
+            path:'gatewaydetail',
+            name:'Gateway',
+            component:()=>import('@/views/gateway/gatewaydetail'),
+            meta:{title:'网关详情',icon:'table'},
+            hidden: true
+          },
+        ]
       },
       {
         path: 'complex',
