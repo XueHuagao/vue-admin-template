@@ -94,20 +94,11 @@ export const constantRoutes = [
         path: 'gateway',
         name: 'Gateway',
         component: () => import('@/views/gateway/index'),
-        meta: { title: '网关', icon: 'table' },
-        children: [
-          {
-            path:'gatewaydetail',
-            name:'Gateway',
-            component:()=>import('@/views/gateway/gatewaydetail'),
-            meta:{title:'网关详情',icon:'table'},
-            hidden: true
-          },
-        ]
+        meta: { title: '网关', icon: 'table' }
       },
       {
         path: 'complex',
-        name: 'Gateway',
+        name: 'complexGateway',
         component: () => import('@/views/gateway/complex'),
         meta: { title: '网关complex', icon: 'table' }
       },
@@ -119,7 +110,7 @@ export const constantRoutes = [
       },
       {
         path: 'example',
-        name: 'Controller',
+        name: 'exampleController',
         component: () => import('@/views/controller/example'),
         meta: { title: '控制器example', icon: 'tree' }
       },
@@ -128,6 +119,35 @@ export const constantRoutes = [
         name: 'Modbus',
         component: () => import('@/views/modbus/index'),
         meta: { title: 'ModBus', icon: 'tree' }
+      },
+      {
+        path:'gatewaydetail/:id(\\d+)',
+        name:'gatewaydetail',
+        component:()=>import('@/views/gateway/gatewaydetail'),
+        meta:{title:'detail',icon:'table'},
+        hidden:true
+      },
+      {
+        path:'controllerdetail/:id(\\d+)',
+        name:'controllerdetail',
+        component:()=>import('@/views/controller/controllerdetail'),
+        meta:{title:'detail',icon:'table'},
+        hidden:true
+      },
+      {
+        // path:'gatewaydetailfor',
+        // name:'gatewaydetailfor',
+        // component:()=>import('@/views/gateway/gatewaydetails/detail'),
+        // component:()=>import('@/views/gateway/gatewaydetail'),
+        // meta:{title:'detail布局'},
+        
+          
+            path:'alarmconfig',
+            name:'alarmconfig',
+            component:()=>import('@/views/alarmconfig'),
+            meta:{title:'config'}
+          
+        
       }
     ]
   },

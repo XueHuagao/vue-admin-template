@@ -1,7 +1,5 @@
 <template>
   <div class="app-container">
-  
-    <h1>hehe</h1>
+      <h1>detail布局</h1>
   </div>
 </template>
-

@@ -25,7 +25,12 @@
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column label="名字">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+       <template slot-scope="{row}">
+          <router-link :to="'/devices/gatewaydetail/'+row.id" class="link-type">
+            <span>{{ row.name }}</span>
+          </router-link>
+        </template>
+
       </el-table-column>
       <el-table-column label="mac地址" align="center">
         <template slot-scope="scope">

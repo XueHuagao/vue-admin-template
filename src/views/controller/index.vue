@@ -25,7 +25,11 @@
         <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column label="名字">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+        <template slot-scope="scope">
+           <router-link :to="'/devices/controllerdetail/'+scope.row.id" class="link-type">
+            <span>{{ scope.row.name }}</span>
+          </router-link>
+        </template>
       </el-table-column>
       <el-table-column label="站号">
         <template slot-scope="scope">{{ scope.row.station_address }}</template>
