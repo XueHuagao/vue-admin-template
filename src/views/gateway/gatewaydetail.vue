@@ -39,8 +39,15 @@
         </tbody>
       </table>
       <el-button type="primary">主要按钮</el-button>
-      <router-link :to="'/devices/alarmconfig?id='+result.id" class="link-type">
-        <span>{{ result.name }}</span>
+      <router-link :to="'/devices/alarms?id='+result.id" class="link-type">
+        <!-- <span>{{ result.name }}</span> -->
+        <span>警报</span>
+      </router-link>
+      <router-link :to="'/devices/configuration?id='+result.id" class="link-type">
+        <span>配置</span>
+      </router-link>
+      <router-link :to="'/devices/schema?id='+result.id" class="link-type">
+        <span>schema</span>
       </router-link>
     </div>
   </div>

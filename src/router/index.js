@@ -142,9 +142,9 @@ export const constantRoutes = [
         // meta:{title:'detail布局'},
         
           
-            path:'alarmconfig',
-            name:'alarmconfig',
-            component:()=>import('@/views/alarmconfig'),
+            path:'alarms',
+            name:'alarms',
+            component:()=>import('@/views/alarmconfig/alarms'),
             meta:{title:'config'}
           
         
