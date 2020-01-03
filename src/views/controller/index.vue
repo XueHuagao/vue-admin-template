@@ -169,13 +169,11 @@
 <script>
 import Pagination from "@/components/Pagination";
 import { getList } from "@/api/table";
-
 const defaultRole = {
   name: "",
   station_address: "",
   gatewayid:""
 };
-
 export default {
   components: { Pagination },
   filters: {
@@ -201,7 +199,6 @@ export default {
         limit: 10,
         name: ""
       },
-
       optionListQuery: {
         page: 1,
         limit: 10,
@@ -209,13 +206,11 @@ export default {
       },
       value: [],
       loading: false,
-
       options: null,
       optionList: null,
       optionTotal: 0
     };
   },
-
   created() {
     this.fetchData();
     this.fetchOptions();
@@ -235,7 +230,6 @@ export default {
         this.role.gatewayid=value;
       });
     },
-
     fetchData() {
       this.$axios.post("/controllerlist", this.listQuery).then(response => {
         this.list = response.data.result;

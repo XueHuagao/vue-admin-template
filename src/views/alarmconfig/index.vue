@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
-  
-    <h1>hehe</h1>
+     <h1>提醒</h1>
   </div>
 </template>
 

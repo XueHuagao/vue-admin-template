@@ -121,18 +121,18 @@ export const constantRoutes = [
         meta: { title: 'ModBus', icon: 'tree' }
       },
       {
-        path:'gatewaydetail/:id(\\d+)',
-        name:'gatewaydetail',
-        component:()=>import('@/views/gateway/gatewaydetail'),
-        meta:{title:'detail',icon:'table'},
-        hidden:true
+        path: 'gatewaydetail/:id(\\d+)',
+        name: 'gatewaydetail',
+        component: () => import('@/views/gateway/gatewaydetail'),
+        meta: { title: 'detail', icon: 'table' },
+        hidden: true
       },
       {
-        path:'controllerdetail/:id(\\d+)',
-        name:'controllerdetail',
-        component:()=>import('@/views/controller/controllerdetail'),
-        meta:{title:'detail',icon:'table'},
-        hidden:true
+        path: 'controllerdetail/:id(\\d+)',
+        name: 'controllerdetail',
+        component: () => import('@/views/controller/controllerdetail'),
+        meta: { title: 'detail', icon: 'table' },
+        hidden: true
       },
       {
         // path:'gatewaydetailfor',
@@ -140,14 +140,30 @@ export const constantRoutes = [
         // component:()=>import('@/views/gateway/gatewaydetails/detail'),
         // component:()=>import('@/views/gateway/gatewaydetail'),
         // meta:{title:'detail布局'},
-        
-          
-            path:'alarms',
-            name:'alarms',
-            component:()=>import('@/views/alarmconfig/alarms'),
-            meta:{title:'config'}
-          
-        
+
+
+        path: 'alarms',
+        name: 'alarms',
+        component: () => import('@/views/alarmconfig/alarms'),
+        meta: { title: 'config' }
+
+
+      },
+      {
+        path: 'notification',
+        name: 'notification',
+        component: () => import('@/views/alarmconfig/index'),
+        meta: { title: 'notification' }
+
+      },
+      {
+        // path:'controllerconfig/:id(\\d+)',
+        // path: 'controllerdetail/:id(\\d+)',
+        path: 'controllerconfig/:id(\\d+)',
+        // path:'controllerconfig',
+        name:'controllerconfig',
+        component:()=>import('@/views/configuration/controllervalue'),
+        meta: { title: 'controllervalue' }
       }
     ]
   },

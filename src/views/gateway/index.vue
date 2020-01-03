@@ -94,12 +94,10 @@
 <script>
 import Pagination from "@/components/Pagination";
 import { getList } from "@/api/table";
-
 const defaultRole = {
   name: '',
   mac:''
 }
-
 export default {
   components: { Pagination },
   filters: {

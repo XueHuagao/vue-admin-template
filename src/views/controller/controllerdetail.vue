@@ -1,47 +1,57 @@
 <template>
   <div class="app-container">
-    
- 
     <div class="col-md-10">
-    <h3 class="navbar-text">控制器信息</h3>
-    <table class="table table-hover">
+      <h3 class="navbar-text">控制器信息</h3>
+      <table class="table table-hover">
         <tbody>
-        <tr>
+          <tr>
             <td>名称</td>
             <td>{{result.name}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>状态</td>
             <td>{{result.status}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>序列号</td>
             <td>{{result.serialnum}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>固件版本</td>
             <td>{{result.firmwarever}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>IMSI</td>
             <td>{{result.IMSI}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>IMEI</td>
             <td>{{result.IMEI}}</td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td>最近出现</td>
             <td>{{result.lastdate}}</td>
-        </tr>
-        <tr>
-            <td>注册日期
-            </td>
+          </tr>
+          <tr>
+            <td>注册日期</td>
             <td>{{result.registerDate}}</td>
-        </tr>
+          </tr>
         </tbody>
-    </table>
-</div>
+      </table>
+      <router-link :to="'/devices/alarms?id='+result.id" class="link-type">
+        <!-- <span>{{ result.name }}</span> -->
+        <span>配置警报</span>
+      </router-link>
+      <router-link :to="'/devices/notification?id='+result.id" class="link-type">
+        <span>警报提醒</span>
+      </router-link>
+      <router-link :to="'/devices/schema?id='+result.id" class="link-type">
+        <span>schema</span>
+      </router-link>
+      <router-link :to="'/devices/controllerconfig/'+result.id" class="link-type">
+      <span>Configuration</span>
+      </router-link>
+    </div>
   </div>
 </template>
 <script>
@@ -55,8 +65,8 @@ export default {
         limit: 10,
         name: ""
       },
-      result:[],
-      displayname:""
+      result: [],
+      displayname: ""
     };
   },
   created() {
@@ -65,14 +75,11 @@ export default {
   },
   methods: {
     fetchData(id) {
-        this.$axios.get("/gatewaydetails?id=92")
-        .then(response=>{    
-            this.result=response.data.result;
-            this.listLoading=false;
-        });
+      this.$axios.get("/controllerdetail?id=" + id).then(response => {
+        this.result = response.data.result;
+        this.listLoading = false;
+      });
     }
-
-
   }
 };
 </script>
