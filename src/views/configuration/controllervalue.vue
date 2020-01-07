@@ -61,48 +61,73 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="update">
-              <el-input v-model="role.mac" placeholder="MAC地址" />
+              <el-select v-model="role.updatemode" placeholder="update">
+                <el-option
+                  v-for="item in updates"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="type">
-              <el-input v-model="role.type" />
+              <el-select v-model="role.type" @change="changetype">
+                <el-option
+                  v-for="item in types"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="Address">
-              <el-input v-model="role.type" />
+              <el-input v-model="role.registernum" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="length">
-              <el-input v-model="role.type" />
+              <el-input v-model="role.length" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="min">
-              <el-input v-model="role.type" />
+            <el-form-item label="min" v-if="isDecimal">
+              <el-input v-model="role.startvalue" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="max">
-              <el-input v-model="role.type" />
+            <el-form-item label="max" v-if="isDecimal">
+              <el-input v-model="role.endvalue" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="displayon" v-if="!isDecimal">
+              <el-input v-model="role.displayon" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="displayoff" v-if="!isDecimal">
+              <el-input v-model="role.displayoff" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="Data type">
-              <el-input v-model="role.type" />
+            <el-form-item label="Data type" v-if="isDecimal">
+              <el-input v-model="role.Datatype" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="Unit">
-              <el-input v-model="role.type" />
+            <el-form-item label="Unit" v-if="isDecimal">
+              <el-input v-model="role.unit" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -120,7 +145,17 @@ import Pagination from "@/components/Pagination";
 import { getList } from "@/api/table";
 const defaultRole = {
   name: "",
-  mac: ""
+  updatemode: "",
+  type:"",
+  registernum:"",
+  length:"",
+  startvalue:"",
+  endvalue:"",
+  displayon:"",
+  displayoff:"",
+  Datatype:"",
+  unit:"",
+  controllerid:""
 };
 export default {
   components: { Pagination },
@@ -146,7 +181,34 @@ export default {
         page: 1,
         limit: 10,
         id: this.$route.params.id
-      }
+      },
+      isDecimal: true,
+      updates: [
+        {
+          value: "1",
+          label: "every minute"
+        },
+        {
+          value: "2",
+          label: "all 15 Minutes"
+        },
+        {
+          value: "3",
+          label: "all 24 Hours"
+        }
+      ],
+      updatevalue: "",
+      types: [
+        {
+          value: "1",
+          label: "holding register"
+        },
+        {
+          value: "2",
+          label: "coil"
+        }
+      ],
+      typevalue: ""
     };
   },
   created() {
@@ -168,9 +230,17 @@ export default {
       this.dialogVisible = true;
     },
     confirmRole() {
+      this.role.controllerid=this.$route.params.id;
       this.$axios.post("/addGatewayapi", this.role);
       this.dialogVisible = false;
       this.fetchData();
+    },
+    changetype() {
+      if (this.role.type == 2) {
+        this.isDecimal = false;
+      } else {
+        this.isDecimal = true;
+      }
     }
   }
 };
