@@ -49,7 +49,10 @@
         <span>schema</span>
       </router-link>
       <router-link :to="'/devices/controllerconfig/'+result.id" class="link-type">
-      <span>Configuration</span>
+        <span>Configuration</span>
+      </router-link>
+      <router-link :to="'/devices/controllercommand/'+result.id" class="link-type">
+        <span>Command</span>
       </router-link>
     </div>
   </div>

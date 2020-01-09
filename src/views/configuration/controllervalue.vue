@@ -16,9 +16,7 @@
     >
       <el-table-column label="名字">
         <template slot-scope="{row}">
-          <router-link :to="'/devices/gatewaydetail/'+row.id" class="link-type">
-            <span>{{ row.name }}</span>
-          </router-link>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="类型" align="center">
@@ -48,20 +46,17 @@
       @pagination="fetchData"
     />
 
-    <el-dialog
-      :visible.sync="dialogVisible"
-      :title="dialogType==='edit'?'Edit Role':'Define value'"
-    >
-      <el-form :model="role" label-width="80px" label-position="right">
+    <el-dialog :visible.sync="dialogVisible" :title="textMap[dialogStatus]">
+      <el-form :model="temp" label-width="80px" label-position="right">
         <el-row>
           <el-col :span="12">
             <el-form-item label="name">
-              <el-input v-model="role.name" placeholder="value description" />
+              <el-input v-model="temp.name" placeholder="value description" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="update">
-              <el-select v-model="role.updatemode" placeholder="update">
+              <el-select v-model="temp.updatemode" placeholder="update">
                 <el-option
                   v-for="item in updates"
                   :key="item.value"
@@ -75,7 +70,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="type">
-              <el-select v-model="role.type" @change="changetype">
+              <el-select v-model="temp.type" @change="changetype">
                 <el-option
                   v-for="item in types"
                   :key="item.value"
@@ -87,47 +82,47 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="Address">
-              <el-input v-model="role.registernum" />
+              <el-input v-model="temp.registernum" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="length">
-              <el-input v-model="role.length" />
+              <el-input v-model="temp.length" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="min" v-if="isDecimal">
-              <el-input v-model="role.startvalue" />
+            <el-form-item label="min" v-if="temp.type == 1">
+              <el-input v-model="temp.startvalue" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="max" v-if="isDecimal">
-              <el-input v-model="role.endvalue" />
+            <el-form-item label="max" v-if="temp.type == 1">
+              <el-input v-model="temp.endvalue" />
             </el-form-item>
           </el-col>
-
+<!--displayon off 先隐藏了 这就是个弱智设计-->
           <el-col :span="8">
-            <el-form-item label="displayon" v-if="!isDecimal">
-              <el-input v-model="role.displayon" />
+            <el-form-item label="displayon" v-if="temp.type == 6">
+              <el-input v-model="temp.displayon" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="displayoff" v-if="!isDecimal">
-              <el-input v-model="role.displayoff" />
+            <el-form-item label="displayoff" v-if="temp.type == 6">
+              <el-input v-model="temp.displayoff" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="Data type" v-if="isDecimal">
-              <el-input v-model="role.Datatype" />
+            <el-form-item label="Data type" v-if="temp.type == 1">
+              <el-input v-model="temp.Datatype" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="Unit" v-if="isDecimal">
-              <el-input v-model="role.unit" />
+            <el-form-item label="Unit" v-if="temp.type == 1">
+              <el-input v-model="temp.unit" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -145,17 +140,17 @@ import Pagination from "@/components/Pagination";
 import { getList } from "@/api/table";
 const defaultRole = {
   name: "",
-  updatemode: "",
-  type:"",
-  registernum:"",
-  length:"",
-  startvalue:"",
-  endvalue:"",
-  displayon:"",
-  displayoff:"",
-  Datatype:"",
-  unit:"",
-  controllerid:""
+  updatemode: 2,
+  type: 2,
+  registernum: "",
+  length: "",
+  startvalue: "",
+  endvalue: "",
+  displayon: "",
+  displayoff: "",
+  Datatype: "",
+  unit: "",
+  controllerid: ""
 };
 export default {
   components: { Pagination },
@@ -181,6 +176,25 @@ export default {
         page: 1,
         limit: 10,
         id: this.$route.params.id
+      },
+      temp: {
+        id: undefined,
+        updatemode: 1,
+        type: 1,
+        registernum: "",
+        length: "",
+        startvalue: "",
+        endvalue: "",
+        displayon: "",
+        displayoff: "",
+        Datatype: "",
+        unit: "",
+        controllerid: this.$route.params.id
+      },
+      dialogStatus: "Create",
+      textMap: {
+        update: "Edit",
+        create: "Create"
       },
       isDecimal: true,
       updates: [
@@ -208,7 +222,21 @@ export default {
           label: "coil"
         }
       ],
-      typevalue: ""
+      typevalue: "",
+      datatypes: [
+        {
+          value: "1",
+          label: "number"
+        },
+        {
+          value: "2",
+          label: "date"
+        },
+        {
+          value: "3",
+          label: "unknow"
+        }
+      ]
     };
   },
   created() {
@@ -226,17 +254,50 @@ export default {
     handleSearch() {
       this.fetchData();
     },
+    resetTemp() {
+      this.temp = {
+        id: undefined,
+        updatemode: "1",
+        type: "1",
+        registernum: "",
+        length: "",
+        startvalue: "",
+        endvalue: "",
+        displayon: "",
+        displayoff: "",
+        Datatype: "",
+        unit: "",
+        controllerid: this.$route.params.id
+      };
+    },
     handleCreate() {
+      this.resetTemp();
+      this.dialogStatus = "create";
+      this.dialogVisible = true;
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row);
+      console.log(this.temp.id);
+      this.dialogStatus = "update";
       this.dialogVisible = true;
     },
     confirmRole() {
-      this.role.controllerid=this.$route.params.id;
-      this.$axios.post("/addGatewayapi", this.role);
+      // this.role.controllerid=this.$route.params.id;
+      if (this.dialogStatus == "create") {
+        this.$axios.post("/addcontrollerparam", this.temp);
+      } else {
+        this.$axios.post("/updatecontrollerparam",this.temp);
+      }
       this.dialogVisible = false;
-      this.fetchData();
+      this.fetchData(this.$route.params.id);
     },
+    // confirmRole(){
+    //   this.$axios.post("/addGatewayapi",this.role);
+    //   this.dialogVisible=false;
+    //   this.fetchData();
+    // },
     changetype() {
-      if (this.role.type == 2) {
+      if (this.temp.type == 2) {
         this.isDecimal = false;
       } else {
         this.isDecimal = true;
