@@ -27,7 +27,7 @@
           <el-button type="primary" @click="sendCommand(row)">Edit</el-button>
         </template>
       </el-table-column> -->
-      <el-table-column label="地址" align="center">
+      <el-table-column label="编辑" align="center">
         <template slot-scope="{row}">
           <el-button type="primary" @click="sendCommand(row)">Edit</el-button>
         </template>

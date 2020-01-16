@@ -54,6 +54,9 @@
       <router-link :to="'/devices/controllercommand/'+result.id" class="link-type">
         <span>Command</span>
       </router-link>
+      <router-link :to="'/devices/controllerstatistics/'+result.id" class="link-type">
+        <span>Statistics</span>
+      </router-link>
     </div>
   </div>
 </template>

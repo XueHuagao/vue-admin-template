@@ -170,6 +170,12 @@ export const constantRoutes = [
         name:'controllercommand',
         component:()=>import('@/views/configuration/command'),
         meta:{title:'command'}
+      },
+      {
+        path:'controllerstatistics/:id(\\d+)',
+        name:'statistics',
+        component:()=>import('@/views/controller/statistics'),
+        meta:{title:'statistics'}
       }
     ]
   },

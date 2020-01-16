@@ -122,7 +122,8 @@ export default {
         page: 1,
         limit: 10,
         name: ""
-      }
+      },
+      hehe:""
     };
   },
   created() {
@@ -134,10 +135,12 @@ export default {
         this.list = response.data.result;
         this.total = response.data.total;
         this.listLoading = false;
+        this.hehe=response.data.total;
       });
     },
     handleSearch() {
       this.fetchData();
+      console.log(this.hehe);
     },
     handleCreate() {
       this.dialogVisible=true
