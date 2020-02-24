@@ -1,5 +1,41 @@
 <template>
   <div class="app-container">
+    <el-tag>
+      <router-link :to="'/devices/controllerdetail/'+result.id" class="link-type">
+        <span>控制器</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/alarms?id='+id" class="link-type">
+        <span>配置警报</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/notification?id='+result.id" class="link-type">
+        <span>警报提醒</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/schema?id='+result.id" class="link-type">
+        <span>schema</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllerconfig/'+result.id" class="link-type">
+        <span>Configuration</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllercommand/'+result.id" class="link-type">
+        <span>Command</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllerstatistics/'+result.id" class="link-type">
+        <span>Statistics</span>
+      </router-link>
+    </el-tag>
+
     <div class="col-md-10">
       <h3 class="navbar-text">控制器信息</h3>
       <table class="table table-hover">
@@ -38,8 +74,7 @@
           </tr>
         </tbody>
       </table>
-      <router-link :to="'/devices/alarms?id='+result.id" class="link-type">
-        <!-- <span>{{ result.name }}</span> -->
+      <!-- <router-link :to="'/devices/alarms?id='+result.id" class="link-type">
         <span>配置警报</span>
       </router-link>
       <router-link :to="'/devices/notification?id='+result.id" class="link-type">
@@ -56,7 +91,7 @@
       </router-link>
       <router-link :to="'/devices/controllerstatistics/'+result.id" class="link-type">
         <span>Statistics</span>
-      </router-link>
+      </router-link>-->
     </div>
   </div>
 </template>
@@ -72,12 +107,13 @@ export default {
         name: ""
       },
       result: [],
-      displayname: ""
+      displayname: "",
+      id:0
     };
   },
   created() {
-    const id = this.$route.params.id;
-    this.fetchData(id);
+    this.id=this.$route.params.id;
+    this.fetchData(this.id);
   },
   methods: {
     fetchData(id) {
@@ -85,6 +121,9 @@ export default {
         this.result = response.data.result;
         this.listLoading = false;
       });
+    },
+    Manageuser() {
+      alert("!");
     }
   }
 };

@@ -188,8 +188,8 @@ export const constantRoutes = [
     meta: { title: '工具', icon: 'example' },
     children: [
       {
-        path: 'gateway',
-        name: 'Gateway',
+        path: 'map',
+        name: 'Map',
         component: () => import('@/views/map/index'),
         meta: { title: '地图', icon: 'table' }
       },

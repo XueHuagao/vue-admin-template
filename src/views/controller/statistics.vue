@@ -33,28 +33,29 @@ export default {
     this.drawLine();
   },
   methods: {
-    fetchData() {
-      this.$axios
+    // 这两种形式的await都可以
+    async fetchyData() {
+      return this.$axios
         .post("/controllermsgvaluelist", this.listQuery)
         .then(response => {
           this.ydata = response.data.result;
         });
     },
+    // async fetchyData(){
+    //   const res = await this.$axios.post("/controllermsgvaluelist", this.listQuery);
+    //   this.ydata = res.data.result;
+    // },
+    async fetchxData() {
+      return this.$axios
+        .post("/controllermsgdatelist", this.listQuery)
+        .then(response => {
+          this.xdata = response.data.result;
+        });
+    },
 
     async drawLine() {
-      await this.$axios
-        .post("/controllermsgvaluelist", this.listQuery)
-        .then(response => {
-          this.ydata = response.data.result;
-        });
-
-      await this.$axios
-      .post("/controllermsgdatelist",this.listQuery)
-      .then(response=>{
-        this.xdata=response.data.result;
-      });
-
-      // await this.fetchData();
+      await this.fetchyData();
+      await this.fetchxData();
 
       console.log(this.ydata);
 

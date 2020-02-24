@@ -1,5 +1,40 @@
 <template>
   <div class="app-container">
+        <el-tag>
+      <router-link :to="'/devices/controllerdetail/'+id" class="link-type">
+        <span>控制器</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/alarms?id='+id" class="link-type">
+        <span>配置警报</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/notification?id='+id" class="link-type">
+        <span>警报提醒</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/schema?id='+id" class="link-type">
+        <span>schema</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllerconfig/'+id" class="link-type">
+        <span>Configuration</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllercommand/'+id" class="link-type">
+        <span>Command</span>
+      </router-link>
+    </el-tag>
+    <el-tag>
+      <router-link :to="'/devices/controllerstatistics/'+id" class="link-type">
+        <span>Statistics</span>
+      </router-link>
+    </el-tag>
     <h1>警报</h1>
     <div class="filter-container" style="margin-top:20px;margin-bottom:20px;">
       <!-- <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleSearch">查找</el-button> -->
@@ -67,10 +102,13 @@ export default {
         page: 1,
         limit: 10,
         name: ""
-      }
+      },
+      id:0
     };
   },
   created() {
+    this.id=this.$route.query.id;
+    alert(this.id);
     this.fetchData();
   },
   methods: {
